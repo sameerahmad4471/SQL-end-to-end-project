@@ -110,14 +110,45 @@ order by milliseconds desc
 
 =========================================================================================================================================
 
+ 
+---------------------------------------------------------Advance----------------------------------------------------------------------------- 
+
+Question Set 3 
+
+ Q1: Find how much amount spent by each customer on artists? Write a query to return customer name, artist name and total spent 
+
+Steps to Solve: 
+1)	First, find which artist has earned the most according to the InvoiceLines.
+2)	Now use this artist to find which customer spent the most on this artist.
+3)	For this query, you will need to use the Invoice, InvoiceLine, Track, Customer, Album, and Artist tables.
+4)	Note :
+	this one is tricky because the Total spent in the Invoice table might not be on a single product, 
+	so you need to use the InvoiceLine table to find out how many of each product was purchased, and then multiply this by the price
+	for each artist. 
 
 
 
-
-
-
-
-
+with top_artist  as (
+select a.artist_id as artist_id,a.name as artist_name,
+sum(il.unit_price * il.quantity) as total_sales
+from invoice_line il
+join track t on il.track_id = t.track_id
+join album al on t.album_id = al.album_id
+join artist a on al.artist_id =a.artist_id
+group by 1
+order by 3 desc
+limit 1
+)
+select c.customer_id,c.first_name,c.last_name,ta.artist_name,
+sum(il.unit_price*il.quantity) as spent_amount
+from invoice i
+join customer c on i.customer_id = c.customer_id
+join invoice_line il on i.invoice_id = il.invoice_id
+join track t on il.track_id = t.track_id
+join album al on t.album_id = al.album_id
+join top_artist ta on al.artist_id = ta.artist_id
+group by 1,2,3,4
+order by 5 desc;
 
 
 
