@@ -1,11 +1,12 @@
-Q1: Who is the senior most employee based on job title? ---
+Q1: Who is the senior most employee based on job title? 
 
 select * from employee
 order by levels desc
 limit 1
 
+-----------------------------------------------------------------------------------------------------------------------------------------
 
-Q2: Which countries have the most Invoices?---
+Q2: Which countries have the most Invoices?
 
 
 select count(*) as total,billing_country
@@ -13,18 +14,20 @@ from invoice
 group by billing_country
 order by total desc
 
+-----------------------------------------------------------------------------------------------------------------------------------------
 
- Q3: What are top 3 values of total invoice? ---
+ Q3: What are top 3 values of total invoice?
 
 
 select total from invoice
 order by total desc
 limit 3
 
+-----------------------------------------------------------------------------------------------------------------------------------------
 
 Q4: Which city has the best customers? We would like to throw a promotional Music Festival in the city we made the most money. 
 Write a query that returns one city that has the highest sum of invoice totals. 
-Return both the city name & sum of all invoice totals. -----
+Return both the city name & sum of all invoice totals. 
 
 
 select sum(total) as total,billing_city
@@ -33,7 +36,7 @@ group by billing_city
 order by total desc
 limit 5
 
-
+-----------------------------------------------------------------------------------------------------------------------------------------
 
 Q5: Who is the best customer? The customer who has spent the most money will be declared the best customer. 
 Write a query that returns the person who has spent the most money.----
@@ -46,8 +49,10 @@ on c.customer_id = i.customer_id
 group by c.customer_id
 order by total desc
 
+=========================================================================================================================================
+------------------------------------------------------------Moderate------------------------------------------------------------------------------
 
-Question Set 2 -   Moderate ----
+Question Set 2 -  
 
 Q1: Write query to return the email, first name, last name, & Genre of all Rock Music listeners. 
 Return your list ordered alphabetically by email starting with A. ----
@@ -63,7 +68,7 @@ where track_id in (
 )
 order by email;
 
-other method-----
+-----------------------------------------------------------other method------------------------------------------------------------------------------
 
 select distinct c.email,c.first_name,c.last_name
 from customer c
@@ -75,10 +80,35 @@ where g.name like 'Rock'
 order by email;
 
 
+-----------------------------------------------------------------------------------------------------------------------------------------
+
+Q2: Let's invite the artists who have written the most rock music in our dataset. 
+Write a query that returns the Artist name and total track count of the top 10 rock bands.
 
 
+select a.artist_id,a.name,count(a.artist_id) as no_of_songs
+from track t
+join album al on t.album_id = al.album_id
+join artist a on al.artist_id = a.artist_id
+join genre g on t.genre_id = g.genre_id
+where g.name like 'Rock'
+group by a.artist_id
+order by no_of_songs
+limit 10 ;
+
+----------------------------------------------------------------------------------------------------------------------------------------
+
+Q3: Return all the track names that have a song length longer than the average song length. 
+Return the Name and Milliseconds for each track. Order by the song length with the longest songs listed first.
 
 
+select name ,milliseconds  from track
+where milliseconds > (
+	select avg(milliseconds) as avg_time from track
+)
+order by milliseconds desc
+
+=========================================================================================================================================
 
 
 
